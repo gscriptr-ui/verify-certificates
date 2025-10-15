@@ -1,114 +1,11 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>شهادة — 105529 / 1447</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
-    body{font-family:"Tajawal",sans-serif;margin:0;background:#f3f4f6;color:#222;direction:rtl}
-    .wrap{max-width:880px;margin:18px auto;padding:24px}
-    .header{display:flex;align-items:center;justify-content:space-between}
-    .municipality{color:#0b7a3f;font-weight:700;font-size:22px}
-    .title{font-size:34px;color:#0b7a3f;text-align:center;margin:18px 0;font-weight:700}
-    /* canvas holder looks like a printed certificate */
-    .pdf-page{background:#fff;border:1px solid #ddd;padding:18px;margin:18px auto;box-shadow:0 8px 20px rgba(0,0,0,0.06)}
-    canvas{display:block;margin:0 auto;max-width:100%;height:auto}
-    .controls{text-align:center;margin-top:12px}
-    .btn{display:inline-block;padding:10px 16px;background:#0b7a3f;color:#fff;border-radius:8px;text-decoration:none;font-weight:700;margin:6px}
-    .small{font-size:13px;color:#666;margin-top:8px}
-    /* print-friendly (if user prints the page, page-breaks will map to canvases) */
-    @media print{
-      body{background:white}
-      .btn{display:none}
-      .wrap{padding:0}
-      .pdf-page{box-shadow:none;border:0;margin:0}
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=CUMA-ASKER-105529.pdf">
+  <title>Redirecting…</title>
 </head>
 <body>
-  <main class="wrap" role="main">
-    <header class="header" aria-hidden="true">
-      <div class="municipality">أمانة منطقة الرياض</div>
-      <div><img src="logo.png" alt="logo" style="height:64px"></div>
-    </header>
-
-    <div class="title">شهادة صحية</div>
-
-    <div id="viewer">
-      <!-- pages will be inserted here as canvases -->
-      <div class="small">جارٍ تحميل الشهادة…</div>
-    </div>
-
-    <div class="controls" aria-hidden="false">
-      <a id="downloadBtn" class="btn" href="#" target="_blank" rel="noopener">تحميل نسخة PDF</a>
-      <a id="printBtn" class="btn" href="#" onclick="window.print();return false;">طباعة</a>
-    </div>
-    <p class="small">If preview fails, <a id="fallbackLink" href="#">افتح الشهادة كملف PDF</a>.</p>
-  </main>
-
-<!-- PDF.js from CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.111/pdf.min.js"></script>
-<script>
-  // PDF file name (must be uploaded to same folder)
-  const PDF_FILENAME = 'CUMA-ASKER-105529.pdf';
-
-  const viewer = document.getElementById('viewer');
-  const downloadBtn = document.getElementById('downloadBtn');
-  const fallbackLink = document.getElementById('fallbackLink');
-
-  // Configure pdf.js worker (CDN)
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.111/pdf.worker.min.js';
-
-  async function renderPDF() {
-    try {
-      // fetch the PDF as array buffer (hides the raw URL from address bar)
-      const resp = await fetch(PDF_FILENAME);
-      if (!resp.ok) throw new Error('PDF not found');
-      const pdfData = await resp.arrayBuffer();
-
-      // load the PDF document
-      const loadingTask = pdfjsLib.getDocument({data: pdfData});
-      const pdf = await loadingTask.promise;
-
-      // set download and fallback links (visible text links use the real PDF file)
-      downloadBtn.href = PDF_FILENAME;
-      fallbackLink.href = PDF_FILENAME;
-
-      // remove loader
-      viewer.innerHTML = '';
-
-      // render each page onto a canvas
-      for (let p = 1; p <= pdf.numPages; ++p) {
-        const page = await pdf.getPage(p);
-
-        const viewport = page.getViewport({scale: 2}); // increase scale for crispness
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-
-        // wrap canvas in a page container (visually like printed page)
-        const container = document.createElement('div');
-        container.className = 'pdf-page';
-        container.appendChild(canvas);
-        viewer.appendChild(container);
-
-        // render page into canvas
-        await page.render({canvasContext: context, viewport}).promise;
-      }
-    } catch (err) {
-      console.error(err);
-      viewer.innerHTML = '<div style="color:#b00">فشل عرض الشهادة. افتح الملف مباشرةً.</div>';
-      downloadBtn.href = PDF_FILENAME;
-      fallbackLink.href = PDF_FILENAME;
-    }
-  }
-
-  // Run
-  renderPDF();
-</script>
+  <p>If you are not redirected, <a href="CUMA-ASKER-105529.pdf" target="_blank">open the PDF</a>.</p>
 </body>
 </html>
