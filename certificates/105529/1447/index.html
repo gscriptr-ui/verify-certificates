@@ -2,90 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>شهادة — 105529 / 1447 (debug)</title>
-  <style>
-    html,body{height:100%;margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}
-    #container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
-    #wrap{width:100%;max-width:900px}
-    .status{background:#eef; border:1px solid #99c; padding:12px; border-radius:6px; margin-bottom:12px}
-    .error{color:#a00; font-weight:700}
-    canvas{display:block;width:100%;height:auto;margin:12px 0;box-shadow:0 6px 20px rgba(0,0,0,0.04)}
-    a.fallback{display:inline-block;margin-top:8px;padding:10px 14px;background:#0b7a3f;color:#fff;border-radius:8px;text-decoration:none}
-  </style>
+  <meta http-equiv="refresh" content="0; url=CUMA-ASKER-105529.pdf">
+  <title>شهادة — 105529 / 1447</title>
 </head>
 <body>
-  <div id="container">
-    <div id="wrap">
-      <div id="status" class="status">التحقق من الملف... (loading)</div>
-      <div id="canvasHost" aria-live="polite"></div>
-      <div id="fallback" style="display:none">
-        <div>لم يتمكن المتصفح من عرض الشهادة هنا. افتحها مباشرةً:</div>
-        <a id="pdfLink" class="fallback" target="_blank" rel="noopener">فتح الشهادة (PDF)</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- PDF.js from mozilla GitHub pages (CDN-like). If worker fails, instructions below show how to host worker locally -->
-  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
-  <script>
-    (function(){
-      const PDF_FILENAME = 'CUMA-ASKER-105529.pdf'; // <<-- change only if your filename differs exactly
-      const status = document.getElementById('status');
-      const host = document.getElementById('canvasHost');
-      const fallback = document.getElementById('fallback');
-      const pdfLink = document.getElementById('pdfLink');
-      pdfLink.href = PDF_FILENAME;
-
-      // set worker; if this path returns 404 in console, see notes below
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
-
-      function showStatus(msg, isError){
-        status.innerHTML = msg;
-        status.className = 'status' + (isError ? ' error' : '');
-      }
-
-      // attempt to fetch the PDF (quick 1st check)
-      fetch(PDF_FILENAME, {method:'HEAD'}).then(res=>{
-        if (!res.ok) {
-          showStatus('خطأ: الملف غير موجود في نفس المسار أو اسم الملف خاطئ. (' + res.status + ')', true);
-          fallback.style.display = 'block';
-          return Promise.reject(new Error('PDF not found: ' + res.status));
-        }
-
-        showStatus('تحميل الشهادة وبدء العرض...');
-
-        return pdfjsLib.getDocument(PDF_FILENAME).promise;
-      }).then(async pdf => {
-        showStatus('تم تحميل ' + pdf.numPages + ' صفحة. عرض الآن...');
-        // render each page
-        for (let p=1; p<=pdf.numPages; p++){
-          const page = await pdf.getPage(p);
-          // compute scale to container width
-          const viewport = page.getViewport({ scale: 1 });
-          const containerWidth = Math.min(host.clientWidth || 900, 900);
-          const scale = (containerWidth / viewport.width) * (window.devicePixelRatio || 1);
-          const vp = page.getViewport({ scale });
-          const canvas = document.createElement('canvas');
-          canvas.width = Math.floor(vp.width);
-          canvas.height = Math.floor(vp.height);
-          canvas.style.width = Math.floor(vp.width / (window.devicePixelRatio || 1)) + 'px';
-          canvas.style.height = Math.floor(vp.height / (window.devicePixelRatio || 1)) + 'px';
-          const ctx = canvas.getContext('2d');
-          await page.render({ canvasContext: ctx, viewport: vp }).promise;
-          host.appendChild(canvas);
-        }
-        showStatus('تم العرض. إذا ظهر فارغاً على الهاتف: حاول تكبير/تصغير الصفحة أو فتح عبر متصفح آخر.');
-      }).catch(err=>{
-        console.error('PDF render error:', err);
-        showStatus('خطأ أثناء عرض الشهادة: ' + (err && err.message ? err.message : err), true);
-        fallback.style.display = 'block';
-      });
-
-      // helpful dev hint: print console message
-      console.log('debug viewer loaded. PDF path:', PDF_FILENAME,
-                  'workerSrc:', pdfjsLib.GlobalWorkerOptions.workerSrc);
-    })();
-  </script>
+  <p>If you are not redirected, <a href="CUMA-ASKER-105529.pdf" target="_blank">open the PDF</a>.</p>
 </body>
 </html>
