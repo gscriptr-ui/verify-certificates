@@ -1,11 +1,124 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=CUMA-ASKER-105529.pdf">
-  <title>Redirecting…</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>شهادة — 105529 / 1447</title>
+
+  <!-- minimal styling so page is all white and center the rendered certificate -->
+  <style>
+    html,body{height:100%;margin:0;background:#ffffff;font-family:Arial, Helvetica, sans-serif}
+    /* container keeps pdf centered and responsive */
+    #container{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 12px;
+      box-sizing:border-box;
+    }
+    #pdf-canvas-wrap{
+      width:100%;
+      max-width:900px;             /* control maximum certificate width on wide screens */
+      /* keep white */
+      background:#fff;
+      box-shadow:none;
+    }
+    canvas{
+      display:block;
+      width:100% !important;      /* scale canvas to container width */
+      height:auto !important;
+      margin:0 auto 18px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.04);
+      border-radius:4px;
+    }
+    /* hide any fallback link */
+    #fallback{display:none}
+    /* mobile small spacing */
+    @media (max-width:480px){
+      #container{padding:18px 8px}
+    }
+    /* print: make the canvas print nicely */
+    @media print {
+      body{background:white}
+      canvas{page-break-after:always;box-shadow:none;border-radius:0;margin-bottom:0}
+    }
+  </style>
 </head>
 <body>
-  <p>If you are not redirected, <a href="CUMA-ASKER-105529.pdf" target="_blank">open the PDF</a>.</p>
+  <div id="container">
+    <div id="pdf-canvas-wrap" aria-live="polite" role="main"></div>
+  </div>
+
+  <!-- PDF.js from mozilla.github.io (simple CDN link) -->
+  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+  <script>
+    // IMPORTANT: set this to the PDF filename in the same folder
+    const PDF_FILENAME = 'CUMA-ASKER-105529.pdf';
+
+    // Where to render
+    const wrap = document.getElementById('pdf-canvas-wrap');
+
+    // PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+
+    // load document
+    const loadingTask = pdfjsLib.getDocument(PDF_FILENAME);
+    loadingTask.promise.then(async (pdf) => {
+      // render all pages in order
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+
+        // create canvas for this page
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // compute scale so canvas width == container inner width (devicePixelRatio considered)
+        // get CSS width to match
+        const containerWidth = wrap.clientWidth;
+        const viewportUnscaled = page.getViewport({ scale: 1 });
+        const scale = containerWidth / viewportUnscaled.width;
+        // for clarity on high-dpi screens use devicePixelRatio
+        const dpr = Math.max(window.devicePixelRatio || 1, 1);
+        const finalScale = scale * dpr;
+
+        const viewport = page.getViewport({ scale: finalScale });
+
+        // set canvas size in device pixels
+        canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+
+        // style canvas to scale down to CSS pixels (so width:100% works)
+        canvas.style.width = Math.floor(viewport.width / dpr) + 'px';
+        canvas.style.height = Math.floor(viewport.height / dpr) + 'px';
+
+        // render page into canvas
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+        // append canvas
+        wrap.appendChild(canvas);
+
+        // small delay not needed — next page will render immediately
+      }
+
+      // optional: remove any outline / focus
+      document.body.style.visibility = 'visible';
+    }).catch(err => {
+      console.error('PDF render error:', err);
+      // fallback: open the PDF directly if rendering fails
+      window.location.href = PDF_FILENAME;
+    });
+
+    // Re-render on resize to keep canvases crisp if user rotates screen / resizes
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        // If you want to recompute for new width, simplest is reload the page (fast)
+        // This avoids complicated re-render code. We keep it simple:
+        location.reload();
+      }, 200);
+    });
+  </script>
 </body>
 </html>
